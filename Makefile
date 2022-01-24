@@ -19,7 +19,8 @@ OBJ_DIR		=	obj/
 SRCS_DIR	=	sources/
 SRCS		=	philo.c \
 				p_init.c \
-				p_chk_args.c
+				p_chk_args.c \
+				p_utils.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
