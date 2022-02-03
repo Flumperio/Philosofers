@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/01/17 16:19:38 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/02/03 12:40:14 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 */
 static	int	count = 10;
 pthread_mutex_t		mutex = PTHREAD_MUTEX_INITIALIZER;
+
+unsigned long long	time_n(t_main *main)
+{
+	now = (main->time.tv_sec * 1000 + main->time.tv_usec / 1000)
+	return(now);
+}
 
 void	*prog_philo1(void *unused)
 {
@@ -70,11 +76,9 @@ int	main(int argc, char **argv)
 	philos = ft_calloc(sizeof (t_philo), main->n_philo);
 	while(++cnt < main->n_philo)
 	{
-		printf("Philo.pos %i\n", philos[cnt].position);
-		printf("Philo.cnt_eat %i\n", philos[cnt].cnt_eat);
-		printf("Philo.time_msec %lli\n", philos[cnt].time_msec);
-		printf("Philo.time_dead %lli\n", philos[cnt].time_dead);
-
+		philos[cnt].position = cnt;
+		philos[cnt].time_msec = time_n(main);
+		philos[cnt].fork = cnt;
 	}
 
 
