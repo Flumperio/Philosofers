@@ -12,19 +12,20 @@
 
 #include "../includes/philo.h"
 
-t_main	*init_philo(t_main *philo, int argc, char **argv)
+t_main	*init_main(t_main *main, int argc, char **argv)
 {
-	philo = ft_calloc(sizeof (t_main), 1);
-	philo->argc = argc;
-	philo->argv = argv;
-	if (philo->argc < 5 || philo->argc > 6)
+	main = ft_calloc(sizeof (t_main), 1);
+	main->argc = argc;
+	main->argv = argv;
+	if (main->argc < 5 || main->argc > 6)
 		ft_msgerror("Numero de opciones invalidas.\
 		\nSolo se admiten numeros como parametros\
-		\nEjemplo: ./philo n1 n2 n3 n4 n5\n", -1);
-	philo->n_philo = (int)ft_atoi(philo->argv[1]);
-	philo->t_die = (int)ft_atoi(philo->argv[2]);
-	philo->t_eat = (int)ft_atoi(philo->argv[3]);
-	philo->t_sleep = (int)ft_atoi(philo->argv[4]);
-	philo->m_eat = (int)ft_atoi(philo->argv[5]);
-	return (philo);
+		\nEjemplo: ./main n1 n2 n3 n4 n5\n", -1);
+	main->n_philo = (int)ft_atoi(main->argv[1]);
+	main->t_die = (int)ft_atoi(main->argv[2]);
+	main->t_eat = (int)ft_atoi(main->argv[3]);
+	main->t_sleep = (int)ft_atoi(main->argv[4]);
+	if (main->argc == 6)
+		main->m_eat = (int)ft_atoi(main->argv[5]);
+	return (main);
 }

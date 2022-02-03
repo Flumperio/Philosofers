@@ -6,7 +6,7 @@
 #    By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/15 12:02:27 by juasanto          #+#    #+#              #
-#    Updated: 2022/01/15 13:29:30 by juasanto         ###   ########.fr        #
+#    Updated: 2022/02/02 16:03:13 by juasanto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,18 +52,17 @@ all: $(NAME)
 $(OBJ_DIR)%.o : $(SRCS_DIR)%.c
 		@echo Create: $(NAME) Object directory
 		@mkdir -p $(OBJ_DIR)
-		$(CC) -c $(CFLAGS) $(DEBUGGING) $(LFLAGS) $< -o $@
+#		$(CC) -c $(CFLAGS) $(DEBUGGING) $(LFLAGS) $< -o $@
+		$(CC) -c $(DEBUGGING) $(LFLAGS) $< -o $@
 
 $(NAME): $(OBJS)
 #		@echo "$(CYAN)=========== Compilando LIBFT.A ==========="
 #		make -C $(LIB_DIR)
 #		@echo "=========== DONE ==========$(RESET)"
 
-						@echo "$(YELLOW)=========== Compilando $(NAME) ==========="
-		$(LINUX-CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
-#		$(CC)$(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
+		@echo "$(YELLOW)=========== Compilando $(NAME) ==========="
+		$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
 #		$(CC)$(CFLAGS) $(OBJS) $(LFLAGS) $(LIB_DIR)$(LIBFT) -o $(NAME)
-#		$(CC)$(CFLAGS) $(LFLAGS) $(LIB_DIR)$(LIBFT) -o $(NAME) $(OBJS)
 		@echo "=========== DONE ==========$(RESET)"
 clean:
 		@echo "$(PINK)========== CLEAN =========="

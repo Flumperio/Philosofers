@@ -19,10 +19,22 @@
 # include	<stdio.h>
 # include	<unistd.h>
 # include	<stdlib.h>
+# include	<sys/time.h>
+# include	<pthread.h>
 
 /*
-** Aux Structures
+** Philo Structures
 */
+typedef struct			s_philo
+{
+	pthread_t			thread;
+	pthread_mutex_t		mutex;
+	struct	timeval		time;
+	int					position;
+	int					cnt_eat;
+	unsigned long long	time_msec;
+	unsigned long long	time_dead;
+}						t_philo;
 
 /*
 ** Main Structures
@@ -41,15 +53,15 @@ typedef struct s_main
 }			t_main;
 
 /*
-** Funtions
+** Funtions;
 */
-t_main	*init_philo(t_main *philo, int argc, char **argv);
-int		chk_args(t_main *philo);
+t_main			*init_main(t_main *philo, int argc, char **argv);
+int				chk_args(t_main *philo);
 
 /*
 ** Aux Funtions
 */
-void	*ft_calloc(size_t num, size_t size);
+void			*ft_calloc(size_t num, size_t size);
 long long int	ft_atoi(const char *str);
-void	ft_msgerror(char *str, int errno);
+void			ft_msgerror(char *str, int errno);
 #endif
