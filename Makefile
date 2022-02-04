@@ -6,7 +6,7 @@
 #    By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/15 12:02:27 by juasanto          #+#    #+#              #
-#    Updated: 2022/02/02 16:03:13 by juasanto         ###   ########.fr        #
+#   Updated: 2022/02/04 12:34:06 by                  ###   ########.fr       # #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ $(OBJ_DIR)%.o : $(SRCS_DIR)%.c
 		@echo Create: $(NAME) Object directory
 		@mkdir -p $(OBJ_DIR)
 #		$(CC) -c $(CFLAGS) $(DEBUGGING) $(LFLAGS) $< -o $@
-		$(CC) -c $(DEBUGGING) $(LFLAGS) $< -o $@
+		$(CC) -c $(DEBUGGING) $(LFLAGS) $< -o $@ -pthread
 
 $(NAME): $(OBJS)
 #		@echo "$(CYAN)=========== Compilando LIBFT.A ==========="
@@ -61,7 +61,7 @@ $(NAME): $(OBJS)
 #		@echo "=========== DONE ==========$(RESET)"
 
 		@echo "$(YELLOW)=========== Compilando $(NAME) ==========="
-		$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
+		$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME) -pthread
 #		$(CC)$(CFLAGS) $(OBJS) $(LFLAGS) $(LIB_DIR)$(LIBFT) -o $(NAME)
 		@echo "=========== DONE ==========$(RESET)"
 clean:
