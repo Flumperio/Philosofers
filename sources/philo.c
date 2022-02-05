@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/02/04 12:38:58 by                  ###   ########.fr       */
+/*   Updated: 2022/02/05 10:48:23 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,24 @@
 ** Include para trabajar con semaforos y con hilos
 */
 
-unsigned long long	time_n(t_main *main)
+unsigned long long	time_n(t_philo *philos)
 {
 	unsigned long long		now;
 
-	now = (main->time.tv_sec * 1000 + main->time.tv_usec / 1000);
-	return(now);
+	gettimeofday(&philos->time, NULL);
+	now = (philos->time.tv_sec * 1000 + philos->time.tv_usec / 1000);
+	return (now);
 }
 
-void	philo_routine(int cnt)
+void	*philo_routine(void *arg)
 {
-	printf("Routine philo %i\n", cnt);
+	t_philo				*philos;
+
+	philos = arg;
+	philos->time_msec = time_n(philos);
+	printf("Philo[%i]->thread: %llx - time: %lli\n", \
+		philos->position, (unsigned long long )philos->thread, \
+		philos->time_msec);
 }
 
 int	main(int argc, char **argv)
@@ -38,17 +45,19 @@ int	main(int argc, char **argv)
 	main = NULL;
 	main = init_main(main, argc, argv);
 	chk_args(main);
-	philos = ft_calloc(sizeof (t_philo), main->n_philo);
-	while(++cnt < main->n_philo)
+	philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	while (++cnt < main->n_philo)
 	{
 		philos[cnt].position = cnt;
-		philos[cnt].time_msec = time_n(main);
+		philos[cnt].cnt_eat = 0;
 		philos[cnt].fork = cnt;
-		pthread_create(&philos[cnt].thread, NULL, philo_routine,
-		cnt);
-		printf("Philo[%i].Thread: %lld\n", cnt, philos[cnt].thread);
-		pthread_join(philos[cnt].thread, NULL);
+		usleep(10000);
+		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
+			&philos[cnt]);
 	}
+	cnt = -1;
+	while (++cnt < main->n_philo)
+		pthread_join(philos[cnt].thread, NULL);
 	return (0);
 }
 //	if(0 != pthread_create(&philo1, NULL, prog_philo1, NULL))

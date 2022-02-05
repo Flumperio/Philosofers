@@ -35,6 +35,7 @@ typedef struct			s_philo
 	int					fork;
 	unsigned long long	time_msec;
 	unsigned long long	time_dead;
+	struct	timeval		time;
 }						t_philo;
 
 /*
@@ -43,15 +44,14 @@ typedef struct			s_philo
 
 typedef struct s_main
 {
-	int					argc;
-	char				**argv;
-	int					tmp;
-	int					n_philo;
-	int					t_die;
-	int					t_eat;
-	int					t_sleep;
-	int					m_eat;
-	struct	timeval		time;
+int					argc;
+char				**argv;
+int					tmp;
+int					n_philo;
+int					t_die;
+int					t_eat;
+int					t_sleep;
+int					m_eat;
 }						t_main;
 
 /*
