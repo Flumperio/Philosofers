@@ -33,8 +33,10 @@ typedef struct			s_philo
 	int					position;
 	int					cnt_eat;
 	int					fork;
-	unsigned long long	time_msec;
-	unsigned long long	time_dead;
+	int					f_r;
+	int					f_l;
+	long				time_msec;
+	long				time_dead;
 	struct	timeval		time;
 }						t_philo;
 
