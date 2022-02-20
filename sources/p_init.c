@@ -26,6 +26,6 @@ t_main	*init_main(t_main *main, int argc, char **argv)
 	main->t_eat = (int)ft_atoi(main->argv[3]);
 	main->t_sleep = (int)ft_atoi(main->argv[4]);
 	if (main->argc == 6)
-		main->m_eat = (int)ft_atoi(main->argv[5]);
+		main->n_eat = (int)ft_atoi(main->argv[5]);
 	return (main);
 }

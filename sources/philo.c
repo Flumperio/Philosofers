@@ -18,17 +18,6 @@
  * writing all the info to a buffer and printing it out in a single write().
 */
 
-/*
-unsigned long long	time_n(t_philo *philos)
-{
-	unsigned long long		now;
-
-	gettimeofday(&philos->time, NULL);
-	now = (philos->time.tv_sec * 1000 + philos->time.tv_usec / 1000);
-	return (now);
-}
-*/
-
 long	get_time(void)
 {
 	struct timeval	tp;
@@ -40,39 +29,71 @@ long	get_time(void)
 	return (milliseconds);
 }
 
-void	*philo_routine(void *arg)
+void	ft_usleep(size_t time_in_ms)
 {
-	t_philo				*philos;
+	size_t	start_time;
 
-	usleep(2);
-	philos = arg;
-	philos->time_msec = get_time();
-	philos->f_r = philos->position;
-	if ((philos->position - 1) >= 0)
-		philos->f_l = philos->position - 1;
-	printf("Philo[%i]->thread: %llx - time: %lli\n", philos->position, \
-	(unsigned long long )philos->thread, philos->time_msec);
+	start_time = get_time();
+	usleep((time_in_ms - 10) * 1000);
+	while ((get_time() - time_in_ms) < start_time)
+		;
+}
+
+void	pick_fork(t_philo *n_philo)
+{
+	t_philo			*philo;
+
+	philo = n_philo;
+
+	pthread_mutex_lock(&philo->m_f_l);
+	pthread_mutex_lock(&philo->m_f_r);
+	pthread_mutex_lock(&philo->m_fork);
+	philo->f_r = philo->position;
+	if ((philo->position - 1) >= 0)
+		philo->f_l = philo->position - 1;
+	pthread_mutex_unlock(&philo->m_f_l);
+	pthread_mutex_unlock(&philo->m_f_r);
+	pthread_mutex_unlock(&philo->m_fork);
+
+}
+
+void	*philo_routine(void *n_philo)
+{
+	t_philo 		*philo;
+
+	philo = n_philo;
+	philo->time_start = get_time();
+	pick_fork(philo);
+	if (philo->f_r < 0 || philo->f_l < 0)
+			pthread_exit(NULL);
+	ft_usleep(philo->time_eat);
+	printf("Philo %i is eating for %li\n", philo->position, get_time() -
+	philo->time_start);
 	pthread_exit(NULL);
 }
 
-void	init_philos(t_philo *philos, int n_philo)
+void	init_philos(t_main *main)
 {
 	int		cnt;
 
 	cnt = -1;
-	while (++cnt < n_philo)
+	while (++cnt < main->n_philo)
 	{
-		philos[cnt].position = cnt;
-		philos[cnt].cnt_eat = 0;
-		philos[cnt].fork = cnt;
-		philos[cnt].f_l = n_philo;
+		main->philos[cnt].position = cnt;
+		main->philos[cnt].cnt_eat = 0;
+		main->philos[cnt].fork = 0;
+		main->philos[cnt].f_l = main->n_philo;
+		main->philos[cnt].f_r = -1;
+		main->philos[cnt].time_eat = main->t_eat;
+		pthread_mutex_init(&main->philos[cnt].m_f_l, NULL);
+		pthread_mutex_init(&main->philos[cnt].m_f_r, NULL);
+		pthread_mutex_init(&main->philos[cnt].m_fork, NULL);
 	}
 }
 
 int	main(int argc, char **argv)
 {
 	t_main			*main;
-	t_philo			*philos;
 	int				cnt;
 	long			time;
 
@@ -80,25 +101,25 @@ int	main(int argc, char **argv)
 	main = NULL;
 	main = init_main(main, argc, argv);
 	chk_args(main);
-	philos = ft_calloc(sizeof (t_philo *), main->n_philo);
-	init_philos(philos, main->n_philo);
+	main->philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	init_philos(main);
 	while (++cnt < main->n_philo)
 	{
-		usleep(100 * 1000);
-		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
-			&philos[cnt]);
+		pthread_create(&main->philos[cnt].thread, NULL, &philo_routine,
+			&main->philos[cnt]);
 	}
 	cnt = -1;
 	while (++cnt < main->n_philo)
-		pthread_join(philos[cnt].thread, NULL);
+		pthread_join(main->philos[cnt].thread, NULL);
 	cnt = -1;
 	time = get_time();
 	while(++cnt < main->n_philo)
 	{
 		printf("Philo[%i].thread: %llx - sec: %li ------ f-l: %i - f-r: %i\n",
-		philos[cnt].position,
-		(unsigned long long ) philos[cnt].thread, \
-		(time - philos[cnt].time_msec), philos[cnt].f_l, philos[cnt].f_r);
+		main->philos[cnt].position,
+		(unsigned long long ) main->philos[cnt].thread, \
+		(time - main->philos[cnt].time_start), main->philos[cnt].f_l,
+		main->philos[cnt].f_r);
 	}
 	return (0);
 }

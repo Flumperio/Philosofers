@@ -21,7 +21,7 @@ int	chk_args(t_main *main)
 		printf("argv[%i]=%s\n", cnt, main->argv[cnt]);
 	if (main->n_philo <= 0 || main->t_die <= 0 || main->t_eat <= 0 \
 		|| main->t_sleep <= 0 || \
-		(main->argc == 6 && main->m_eat <= 0))
+		(main->argc == 6 && main->n_eat <= 0))
 		ft_msgerror("Valores no validos.\n", -1);
 	return (0);
 }
