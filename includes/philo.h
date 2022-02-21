@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:29 by juasanto          #+#    #+#             */
-/*   Updated: 2022/02/03 12:31:15 by                  ###   ########.fr       */
+/*   Updated: 2022/02/21 13:29:22 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,9 @@
 typedef struct			s_philo
 {
 	pthread_t			thread;
-	pthread_mutex_t		m_f_r;
-	pthread_mutex_t		m_f_l;
-	pthread_mutex_t		m_fork;
-	pthread_mutex_t		m_time_start;
+	pthread_mutex_t		*m_f_r;
+	pthread_mutex_t		*m_f_l;
+
 	int					position;
 	int					cnt_eat;
 	int					fork;
@@ -42,6 +41,7 @@ typedef struct			s_philo
 	size_t				time_dead;
 	size_t				time_eat;
 	struct	timeval		time;
+	struct	t_main		*data_p;
 }						t_philo;
 
 /*
@@ -58,6 +58,9 @@ int					t_die;
 int					t_eat;
 int					t_sleep;
 int					n_eat;
+pthread_mutex_t		*m_fork;
+pthread_mutex_t		lock_print;
+pthread_mutex_t		lock_gen;
 t_philo				*philos;
 }						t_main;
 

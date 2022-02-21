@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/02/05 10:48:23 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/02/21 13:34:46 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,21 @@ long	get_time(void)
 
 void	ft_usleep(size_t time_in_ms)
 {
-	size_t	start_time;
+	unsigned long		start_time;
 
 	start_time = get_time();
 	usleep((time_in_ms - 10) * 1000);
 	while ((get_time() - time_in_ms) < start_time)
-		;
+			;
+}
+
+void	ft_usleep_1(size_t time_in_ms)
+{
+	unsigned long		start_time;
+
+	start_time = get_time();
+	while (get_time() < (time_in_ms + start_time))
+		usleep(500);
 }
 
 void	pick_fork(t_philo *n_philo)
@@ -54,6 +63,11 @@ void	pick_fork(t_philo *n_philo)
 	pthread_mutex_unlock(&philo->m_f_l);
 	pthread_mutex_unlock(&philo->m_f_r);
 	pthread_mutex_unlock(&philo->m_fork);
+	pthread_mutex_lock(&philo->m_t_e);
+	ft_usleep(philo->time_eat);
+	printf("Philo %i is eating for %li\n", philo->position, get_time() -
+	philo->time_start);
+	pthread_mutex_unlock(&philo->m_t_e);
 
 }
 
@@ -66,9 +80,6 @@ void	*philo_routine(void *n_philo)
 	pick_fork(philo);
 	if (philo->f_r < 0 || philo->f_l < 0)
 			pthread_exit(NULL);
-	ft_usleep(philo->time_eat);
-	printf("Philo %i is eating for %li\n", philo->position, get_time() -
-	philo->time_start);
 	pthread_exit(NULL);
 }
 
@@ -88,6 +99,8 @@ void	init_philos(t_main *main)
 		pthread_mutex_init(&main->philos[cnt].m_f_l, NULL);
 		pthread_mutex_init(&main->philos[cnt].m_f_r, NULL);
 		pthread_mutex_init(&main->philos[cnt].m_fork, NULL);
+		pthread_mutex_init(&main->philos[cnt].m_t_e, NULL);
+
 	}
 }
 
