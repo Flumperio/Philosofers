@@ -23,25 +23,26 @@
 # include	<sys/time.h>
 # include	<pthread.h>
 
+//typedef struct s_main t_main;
 /*
 ** Philo Structures
 */
 typedef struct			s_philo
 {
 	pthread_t			thread;
-	pthread_mutex_t		*m_f_r;
-	pthread_mutex_t		*m_f_l;
+	pthread_mutex_t		m_f_r;
+	pthread_mutex_t		m_f_l;
 
 	int					position;
 	int					cnt_eat;
 	int					fork;
 	int					f_r;
 	int					f_l;
-	size_t				time_start;
-	size_t				time_dead;
-	size_t				time_eat;
-	struct	timeval		time;
-	struct	t_main		*data_p;
+	unsigned long		time_start;
+	unsigned long		time_dead;
+	unsigned long		time_eat;
+	struct timeval		time;
+	struct t_main		data_p;
 }						t_philo;
 
 /*
@@ -58,7 +59,7 @@ int					t_die;
 int					t_eat;
 int					t_sleep;
 int					n_eat;
-pthread_mutex_t		*m_fork;
+pthread_mutex_t		*lock_fork;
 pthread_mutex_t		lock_print;
 pthread_mutex_t		lock_gen;
 t_philo				*philos;

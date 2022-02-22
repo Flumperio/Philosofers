@@ -18,10 +18,10 @@
  * writing all the info to a buffer and printing it out in a single write().
 */
 
-long	get_time(void)
+unsigned long	get_time(void)
 {
 	struct timeval	tp;
-	long			milliseconds;
+	unsigned long	milliseconds;
 
 	gettimeofday(&tp, NULL);
 	milliseconds = tp.tv_sec * 1000;
@@ -48,11 +48,23 @@ void	ft_usleep_1(size_t time_in_ms)
 		usleep(500);
 }
 
+void	fn_print(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data_p->lock_gen);
+	printf("Philo[%i], %lli\n", philo->position, philo->thread);
+	pthread_mutex_unlock(&philo->data_p->lock_gen);
+}
+
 void	pick_fork(t_philo *n_philo)
 {
-	t_philo			*philo;
+	t_philo *philo;
+	int				cnt;
 
+	cnt = -1;
 	philo = n_philo;
+	fn_print(philo);
+
+/*	philo = n_philo;
 
 	pthread_mutex_lock(&philo->m_f_l);
 	pthread_mutex_lock(&philo->m_f_r);
@@ -67,7 +79,7 @@ void	pick_fork(t_philo *n_philo)
 	ft_usleep(philo->time_eat);
 	printf("Philo %i is eating for %li\n", philo->position, get_time() -
 	philo->time_start);
-	pthread_mutex_unlock(&philo->m_t_e);
+	pthread_mutex_unlock(&philo->m_t_e);*/
 
 }
 
@@ -83,25 +95,52 @@ void	*philo_routine(void *n_philo)
 	pthread_exit(NULL);
 }
 
-void	init_philos(t_main *main)
+void	init_philos(t_main *main, t_philo *philos)
 {
 	int		cnt;
 
 	cnt = -1;
+	main->philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	main->lock_fork = ft_calloc(sizeof (pthread_mutex_t *), main->n_philo);
 	while (++cnt < main->n_philo)
 	{
-		main->philos[cnt].position = cnt;
-		main->philos[cnt].cnt_eat = 0;
-		main->philos[cnt].fork = 0;
-		main->philos[cnt].f_l = main->n_philo;
-		main->philos[cnt].f_r = -1;
-		main->philos[cnt].time_eat = main->t_eat;
+		pthread_mutex_init(&main->lock_fork[cnt], NULL);
 		pthread_mutex_init(&main->philos[cnt].m_f_l, NULL);
 		pthread_mutex_init(&main->philos[cnt].m_f_r, NULL);
-		pthread_mutex_init(&main->philos[cnt].m_fork, NULL);
-		pthread_mutex_init(&main->philos[cnt].m_t_e, NULL);
-
+		main->philos[cnt].position = cnt + 1;
+		main->philos[cnt].cnt_eat = 0;
+		main->philos[cnt].data_p = main;
 	}
+	cnt = -1;
+	while (++cnt < main->n_philo)
+	{
+		main->philos[cnt].m_f_r = main->lock_fork[cnt];
+		if (cnt == 0) {
+			main->philos[cnt].m_f_l = main->lock_fork[main->n_philo];
+		}
+		else {
+			main->philos[cnt].m_f_l = main->lock_fork[main->n_philo - 1];
+		}
+	}
+	pthread_mutex_init(&main->lock_print, NULL);
+	pthread_mutex_init(&main->lock_gen, NULL);
+	/*	int		cnt;
+
+		cnt = -1;
+		while (++cnt < main->n_philo)
+		{
+			main->philos[cnt].position = cnt;
+			main->philos[cnt].cnt_eat = 0;
+			main->philos[cnt].fork = 0;
+			main->philos[cnt].f_l = main->n_philo;
+			main->philos[cnt].f_r = -1;
+			main->philos[cnt].time_eat = main->t_eat;
+			pthread_mutex_init(&main->philos[cnt].m_f_l, NULL);
+			pthread_mutex_init(&main->philos[cnt].m_f_r, NULL);
+			pthread_mutex_init(&main->philos[cnt].m_fork, NULL);
+			pthread_mutex_init(&main->philos[cnt].m_t_e, NULL);
+
+		}*/
 }
 
 int	main(int argc, char **argv)
@@ -114,8 +153,8 @@ int	main(int argc, char **argv)
 	main = NULL;
 	main = init_main(main, argc, argv);
 	chk_args(main);
-	main->philos = ft_calloc(sizeof (t_philo *), main->n_philo);
-	init_philos(main);
+	//main->philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	init_philos(main, main->philos);
 	while (++cnt < main->n_philo)
 	{
 		pthread_create(&main->philos[cnt].thread, NULL, &philo_routine,
