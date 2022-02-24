@@ -25,31 +25,10 @@
 
 //typedef struct s_main t_main;
 /*
-** Philo Structures
-*/
-typedef struct			s_philo
-{
-	pthread_t			thread;
-	pthread_mutex_t		m_f_r;
-	pthread_mutex_t		m_f_l;
-
-	int					position;
-	int					cnt_eat;
-	int					fork;
-	int					f_r;
-	int					f_l;
-	unsigned long		time_start;
-	unsigned long		time_dead;
-	unsigned long		time_eat;
-	struct timeval		time;
-	struct t_main		data_p;
-}						t_philo;
-
-/*
 ** Main Structures
 */
 
-typedef struct s_main
+typedef struct			s_main
 {
 int					argc;
 char				**argv;
@@ -62,14 +41,38 @@ int					n_eat;
 pthread_mutex_t		*lock_fork;
 pthread_mutex_t		lock_print;
 pthread_mutex_t		lock_gen;
-t_philo				*philos;
+struct s_philo		*philos;
 }						t_main;
+
+/*
+** Philo Structures
+*/
+typedef struct			s_philo
+{
+pthread_t			thread;
+pthread_mutex_t		m_f_r;
+pthread_mutex_t		m_f_l;
+
+int					position;
+int					cnt_eat;
+int					fork;
+int					f_r;
+int					f_l;
+unsigned long		time_start;
+unsigned long		time_dead;
+unsigned long		time_eat;
+struct timeval		time;
+t_main				data_p;
+}						t_philo;
 
 /*
 ** Funtions;
 */
 t_main			*init_main(t_main *philo, int argc, char **argv);
+t_philo			*init_philo(t_philo *philos, t_main *main);
+pthread_mutex_t	*init_fork(pthread_mutex_t *fork, t_main *main, t_philo *philo);
 int				chk_args(t_main *philo);
+unsigned long	get_time(void);
 
 /*
 ** Aux Funtions

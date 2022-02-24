@@ -29,3 +29,43 @@ t_main	*init_main(t_main *main, int argc, char **argv)
 		main->n_eat = (int)ft_atoi(main->argv[5]);
 	return (main);
 }
+
+t_philo	*init_philo(t_philo *philos, t_main *main)
+{
+	int		cnt;
+
+	cnt = -1;
+	philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	while (++cnt < main->n_philo)
+	{
+		pthread_mutex_init(&philos[cnt].m_f_l, NULL);
+		pthread_mutex_init(&philos[cnt].m_f_r, NULL);
+		philos[cnt].position = cnt + 1;
+		philos[cnt].cnt_eat = 0;
+		philos[cnt].data_p = *main;
+		philos[cnt].time_start = get_time();
+	}
+	return(philos);
+}
+
+pthread_mutex_t	*init_fork(pthread_mutex_t *fork, t_main *main, t_philo *philo)
+{
+	int		cnt;
+
+	cnt = -1;
+	fork = ft_calloc(sizeof (pthread_mutex_t *), main->n_philo);
+	while (++cnt < main->n_philo)
+		pthread_mutex_init(&fork[cnt], NULL);
+	cnt = -1;
+	while (++cnt < main->n_philo)
+	{
+		philo[cnt].m_f_r = fork[cnt];
+		if(cnt == 0)
+			philo[cnt].m_f_l = fork[main->n_philo];
+		else
+			philo[cnt].m_f_l = fork[cnt - 1];
+	}
+	pthread_mutex_init(&main->lock_print, NULL);
+	pthread_mutex_init(&main->lock_gen, NULL);
+	return (fork);
+}
