@@ -34,8 +34,10 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 {
 	int		cnt;
 
+
 	cnt = -1;
-	philos = ft_calloc(sizeof (t_philo *), main->n_philo);
+	philos = ft_calloc(sizeof (t_philo), main->n_philo);
+	cnt = -1;
 	while (++cnt < main->n_philo)
 	{
 		pthread_mutex_init(&philos[cnt].m_f_l, NULL);
@@ -45,6 +47,7 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 		philos[cnt].data_p = *main;
 		philos[cnt].time_start = get_time();
 	}
+	cnt = -1;
 	return(philos);
 }
 
@@ -53,7 +56,8 @@ pthread_mutex_t	*init_fork(pthread_mutex_t *fork, t_main *main, t_philo *philo)
 	int		cnt;
 
 	cnt = -1;
-	fork = ft_calloc(sizeof (pthread_mutex_t *), main->n_philo);
+	fork = ft_calloc(sizeof (pthread_mutex_t), main->n_philo);
+	cnt = -1;
 	while (++cnt < main->n_philo)
 		pthread_mutex_init(&fork[cnt], NULL);
 	cnt = -1;

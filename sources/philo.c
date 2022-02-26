@@ -29,7 +29,7 @@ unsigned long	get_time(void)
 	return (milliseconds);
 }
 
-void	ft_usleep(size_t time_in_ms)
+void	fn_usleep(size_t time_in_ms)
 {
 	unsigned long		start_time;
 
@@ -39,7 +39,7 @@ void	ft_usleep(size_t time_in_ms)
 			;
 }
 
-void	ft_usleep_1(size_t time_in_ms)
+void	fn_usleep_1(size_t time_in_ms)
 {
 	unsigned long		start_time;
 
@@ -48,21 +48,44 @@ void	ft_usleep_1(size_t time_in_ms)
 		usleep(500);
 }
 
-void	fn_print(t_philo *philo)
+void	fn_print(t_philo *philo, char *task, int time)
 {
 	pthread_mutex_lock(&philo->data_p.lock_gen);
-	printf("Philo[%i], %lli\n", philo->position, philo->thread);
+	printf("Philo[%i] is %s for %i ms\n", philo->position, task, time);
 	pthread_mutex_unlock(&philo->data_p.lock_gen);
 }
 
 void	pick_fork(t_philo *n_philo)
 {
-	t_philo *philo;
+	t_philo			*philo;
 	int				cnt;
+	unsigned long	time;
 
 	cnt = -1;
+	time = 0;
 	philo = n_philo;
-	fn_print(philo);
+	if(philo->position % 2 == 0)
+		fn_usleep(500);
+	philo->time_start = get_time();
+
+	if (pthread_mutex_lock(&philo->m_f_l) == 0)
+			printf("l - ok\n");
+	if (pthread_mutex_lock(&philo->m_f_r) == 0)
+			printf("r - ok\n");
+	fn_print(philo, "Take forks", 0);
+	fn_usleep(2500);
+	pthread_mutex_unlock(&philo->m_f_l);
+	pthread_mutex_unlock(&philo->m_f_r);
+	pthread_mutex_lock(&philo->m_f_l);
+	pthread_mutex_lock(&philo->m_f_r);
+	fn_usleep(philo->data_p.t_eat);
+	fn_print(philo, "Eating", (int)(get_time() - philo->time_start));
+	pthread_mutex_unlock(&philo->m_f_l);
+	pthread_mutex_unlock(&philo->m_f_r);
+
+
+
+
 }
 
 void	*philo_routine(void *n_philo)
@@ -72,8 +95,6 @@ void	*philo_routine(void *n_philo)
 	philo = n_philo;
 	philo->time_start = get_time();
 	pick_fork(philo);
-	if (philo->f_r < 0 || philo->f_l < 0)
-			pthread_exit(NULL);
 	pthread_exit(NULL);
 }
 
@@ -93,6 +114,7 @@ int	main(int argc, char **argv)
 	main->lock_fork = init_fork(main->lock_fork, main, philos);
 	while (++cnt < main->n_philo)
 	{
+		fn_usleep(500);
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
 			&philos[cnt]);
 	}
@@ -101,14 +123,6 @@ int	main(int argc, char **argv)
 		pthread_join(philos[cnt].thread, NULL);
 	cnt = -1;
 	time = get_time();
-	while(++cnt < main->n_philo)
-	{
-		printf("Philo[%i].thread: %llx - sec: %li ------ f-l: %i - f-r: %i\n",
-		philos[cnt].position,
-		(unsigned long long ) philos[cnt].thread, \
-		(time - philos[cnt].time_start), philos[cnt].f_l,
-		philos[cnt].f_r);
-	}
 	return (0);
 }
 

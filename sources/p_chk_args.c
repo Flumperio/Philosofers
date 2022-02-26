@@ -17,8 +17,8 @@ int	chk_args(t_main *main)
 	int		cnt;
 
 	cnt = 0;
-	while (++cnt < main->argc)
-		printf("argv[%i]=%s\n", cnt, main->argv[cnt]);
+/*	while (++cnt < main->argc)
+		printf("argv[%i]=%s\n", cnt, main->argv[cnt]);*/
 	if (main->n_philo <= 0 || main->t_die <= 0 || main->t_eat <= 0 \
 		|| main->t_sleep <= 0 || \
 		(main->argc == 6 && main->n_eat <= 0))
