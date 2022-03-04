@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:23:05 by juasanto          #+#    #+#             */
-/*   Updated: 2022/02/21 12:05:01 by                  ###   ########.fr       */
+/*   Updated: 2022/03/04 12:40:56 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,36 +40,31 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 	cnt = -1;
 	while (++cnt < main->n_philo)
 	{
-		pthread_mutex_init(&philos[cnt].m_f_l, NULL);
-		pthread_mutex_init(&philos[cnt].m_f_r, NULL);
+/*		pthread_mutex_init(&philos[cnt].m_f_l, NULL);
+		pthread_mutex_init(&philos[cnt].m_f_r, NULL);*/
 		philos[cnt].position = cnt + 1;
 		philos[cnt].cnt_eat = 0;
 		philos[cnt].data_p = *main;
 		philos[cnt].time_start = get_time();
+		philos[cnt].m_f_r = &main->lock_fork[cnt];
+		if(cnt == 0)
+			philos[cnt].m_f_l = &main->lock_fork[main->n_philo - 1];
+		else
+			philos[cnt].m_f_l = &main->lock_fork[cnt - 1];
 	}
 	cnt = -1;
 	return(philos);
 }
 
-pthread_mutex_t	*init_fork(pthread_mutex_t *fork, t_main *main, t_philo *philo)
+void	init_fork(t_main *main, t_philo *philo)
 {
 	int		cnt;
 
 	cnt = -1;
-	fork = ft_calloc(sizeof (pthread_mutex_t), main->n_philo);
+	main->lock_fork = ft_calloc(sizeof (pthread_mutex_t), main->n_philo);
 	cnt = -1;
 	while (++cnt < main->n_philo)
-		pthread_mutex_init(&fork[cnt], NULL);
-	cnt = -1;
-	while (++cnt < main->n_philo)
-	{
-		philo[cnt].m_f_r = fork[cnt];
-		if(cnt == 0)
-			philo[cnt].m_f_l = fork[main->n_philo];
-		else
-			philo[cnt].m_f_l = fork[cnt - 1];
-	}
+		pthread_mutex_init(&main->lock_fork[cnt], NULL);
 	pthread_mutex_init(&main->lock_print, NULL);
 	pthread_mutex_init(&main->lock_gen, NULL);
-	return (fork);
 }

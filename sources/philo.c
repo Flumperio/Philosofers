@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/02/21 13:34:46 by                  ###   ########.fr       */
+/*   Updated: 2022/03/04 12:59:20 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,16 @@ void	pick_fork(t_philo *n_philo)
 	cnt = -1;
 	time = 0;
 	philo = n_philo;
-	if(philo->position % 2 == 0)
-		fn_usleep(500);
+
 	philo->time_start = get_time();
 
-	if (pthread_mutex_lock(&philo->m_f_l) == 0)
-			printf("l - ok\n");
-	if (pthread_mutex_lock(&philo->m_f_r) == 0)
-			printf("r - ok\n");
+	pthread_mutex_lock(philo->m_f_l);
+	pthread_mutex_lock(philo->m_f_r);
 	fn_print(philo, "Take forks", 0);
-	fn_usleep(2500);
-	pthread_mutex_unlock(&philo->m_f_l);
-	pthread_mutex_unlock(&philo->m_f_r);
-	pthread_mutex_lock(&philo->m_f_l);
-	pthread_mutex_lock(&philo->m_f_r);
-	fn_usleep(philo->data_p.t_eat);
+	fn_usleep_1(philo->data_p.t_eat);
 	fn_print(philo, "Eating", (int)(get_time() - philo->time_start));
-	pthread_mutex_unlock(&philo->m_f_l);
-	pthread_mutex_unlock(&philo->m_f_r);
+	pthread_mutex_unlock(philo->m_f_l);
+	pthread_mutex_unlock(philo->m_f_r);
 
 
 
@@ -92,10 +84,17 @@ void	*philo_routine(void *n_philo)
 {
 	t_philo 		*philo;
 
-	philo = n_philo;
-	philo->time_start = get_time();
-	pick_fork(philo);
-	pthread_exit(NULL);
+	philo = (t_philo *)n_philo;
+	if(philo->position % 2 == 0)
+		fn_usleep_1(2);
+	while (1)
+	{
+		pick_fork(philo);
+		fn_print(philo, "Is Sleeping", philo->data_p.t_sleep);
+		fn_usleep_1(philo->data_p.t_sleep);
+		fn_print(philo, "Is Thinking", 0);
+	}
+		pthread_exit(NULL);
 }
 
 int	main(int argc, char **argv)
@@ -110,15 +109,17 @@ int	main(int argc, char **argv)
 	philos = NULL;
 	main = init_main(main, argc, argv);
 	chk_args(main);
+	init_fork(main, philos);
 	philos = init_philo(philos, main);
-	main->lock_fork = init_fork(main->lock_fork, main, philos);
 	while (++cnt < main->n_philo)
 	{
-		fn_usleep(500);
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
 			&philos[cnt]);
 	}
+
 	cnt = -1;
+
+
 	while (++cnt < main->n_philo)
 		pthread_join(philos[cnt].thread, NULL);
 	cnt = -1;
