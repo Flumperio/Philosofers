@@ -38,6 +38,7 @@ int					t_die;
 int					t_eat;
 int					t_sleep;
 int					n_eat;
+int					is_alive;
 pthread_mutex_t		*lock_fork;
 pthread_mutex_t		lock_print;
 pthread_mutex_t		lock_gen;

@@ -40,12 +40,9 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 	cnt = -1;
 	while (++cnt < main->n_philo)
 	{
-/*		pthread_mutex_init(&philos[cnt].m_f_l, NULL);
-		pthread_mutex_init(&philos[cnt].m_f_r, NULL);*/
 		philos[cnt].position = cnt + 1;
 		philos[cnt].cnt_eat = 0;
 		philos[cnt].data_p = *main;
-		philos[cnt].time_start = get_time();
 		philos[cnt].m_f_r = &main->lock_fork[cnt];
 		if(cnt == 0)
 			philos[cnt].m_f_l = &main->lock_fork[main->n_philo - 1];
