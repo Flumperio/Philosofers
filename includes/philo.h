@@ -72,7 +72,7 @@ t_main				*data_p;
 */
 t_main			*init_main(t_main *philo, int argc, char **argv);
 t_philo			*init_philo(t_philo *philos, t_main *main);
-void			init_fork(t_main *main, t_philo *philo);
+void			init_fork(t_main *main);
 int				chk_args(t_main *philo);
 unsigned long	get_time(void);
 
