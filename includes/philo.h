@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:29 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/04 12:54:25 by                  ###   ########.fr       */
+/*   Updated: 2022/03/07 11:29:55 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int					is_alive;
 pthread_mutex_t		*lock_fork;
 pthread_mutex_t		lock_print;
 pthread_mutex_t		lock_gen;
+unsigned long		time_start;
 struct s_philo		*philos;
 }						t_main;
 
@@ -59,11 +60,11 @@ int					cnt_eat;
 int					fork;
 int					f_r;
 int					f_l;
-unsigned long		time_start;
+//unsigned long		time_start;
 unsigned long		time_dead;
 unsigned long		time_eat;
 struct timeval		time;
-t_main				data_p;
+t_main				*data_p;
 }						t_philo;
 
 /*

@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:23:05 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/04 12:40:56 by                  ###   ########.fr       */
+/*   Updated: 2022/03/07 11:52:50 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,15 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 	{
 		philos[cnt].position = cnt + 1;
 		philos[cnt].cnt_eat = 0;
-		philos[cnt].data_p = *main;
+		philos[cnt].data_p = main;
 		philos[cnt].m_f_r = &main->lock_fork[cnt];
 		if(cnt == 0)
 			philos[cnt].m_f_l = &main->lock_fork[main->n_philo - 1];
 		else
 			philos[cnt].m_f_l = &main->lock_fork[cnt - 1];
+		philos[cnt].time_eat = get_time();
 	}
-	cnt = -1;
+	main->time_start = get_time();
 	return(philos);
 }
 

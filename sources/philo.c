@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/04 12:59:20 by                  ###   ########.fr       */
+/*   Updated: 2022/03/07 13:44:50 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,34 +52,45 @@ void	fn_print(t_philo *philo, char *task)
 {
 	unsigned long		time;
 
-	pthread_mutex_lock(&philo->data_p.lock_gen);
-	time = get_time() - philo->time_start;
+	pthread_mutex_lock(&philo->data_p->lock_print);
+	time = get_time() - philo->data_p->time_start;
 	printf("%lims Philo[%i] %s\n", time, philo->position, task);
-	pthread_mutex_unlock(&philo->data_p.lock_gen);
+	pthread_mutex_unlock(&philo->data_p->lock_print);
 }
 
-void	pick_fork(t_philo *n_philo)
+void	pick_fork(t_philo *philo)
 {
-	t_philo			*philo;
+/*	t_philo			*philo;
 
-	philo = n_philo;
-	pthread_mutex_lock(philo->m_f_l);
-	pthread_mutex_lock(philo->m_f_r);
-	fn_print(philo, "\033[32mhas taken a fork.\033[0m");
-	pthread_mutex_unlock(philo->m_f_l);
-	pthread_mutex_unlock(philo->m_f_r);
+	philo = n_philo;*/
+	if(philo->position == philo->data_p->n_philo)
+	{
+		pthread_mutex_lock(philo->m_f_l);
+		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
+		pthread_mutex_lock(philo->m_f_r);
+		fn_print(philo, "\033[32mhas taken right fork.\033[0m");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->m_f_r);
+		fn_print(philo, "\033[32mhas taken right fork.\033[0m");
+		pthread_mutex_lock(philo->m_f_l);
+		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
+	}
+/*	pthread_mutex_unlock(philo->m_f_l);
+	pthread_mutex_unlock(philo->m_f_r);*/
 }
 
-void	philo_eat(t_philo *n_philo)
+void	philo_eat(t_philo *philo)
 {
-	t_philo			*philo;
-
-	philo = n_philo;
-	pthread_mutex_lock(philo->m_f_l);
-	pthread_mutex_lock(philo->m_f_r);
+/*	pthread_mutex_lock(philo->m_f_l);
+	pthread_mutex_lock(philo->m_f_r);*/
+	pick_fork(philo);
+	pthread_mutex_lock(&philo->data_p->lock_gen);
 	fn_print(philo, "\033[31mis eating.\033[0m");
-	fn_usleep_1(philo->data_p.t_eat);
 	philo->time_eat = get_time();
+	pthread_mutex_unlock(&philo->data_p->lock_gen);
+	fn_usleep_1(philo->data_p->t_eat);
 	philo->cnt_eat++;
 	pthread_mutex_unlock(philo->m_f_l);
 	pthread_mutex_unlock(philo->m_f_r);
@@ -91,7 +102,7 @@ void	philo_sleep(t_philo *n_philo)
 
 	philo = n_philo;
 	fn_print(philo, "\033[36mis sleeping.\033[0m");
-	fn_usleep_1(philo->data_p.t_sleep);
+	fn_usleep_1(philo->data_p->t_sleep);
 }
 
 void	philo_think(t_philo *n_philo)
@@ -99,8 +110,8 @@ void	philo_think(t_philo *n_philo)
 	t_philo			*philo;
 
 	philo = n_philo;
-	fn_print(philo, "\033[35mis thinking.\033[0m");
-	fn_usleep_1(philo->data_p.t_sleep);
+	fn_print(philo, "\033[33mis thinking.\033[0m");
+	fn_usleep_1(philo->data_p->t_sleep);
 }
 
 void	*philo_routine(void *n_philo)
@@ -109,17 +120,17 @@ void	*philo_routine(void *n_philo)
 
 	philo = (t_philo *)n_philo;
 	if(philo->position % 2 == 0)
-		fn_usleep_1(20);
-	while (1)
+		fn_usleep_1(2);
+	while (philo->data_p->is_alive == 0)
 	{
-		if(philo->cnt_eat == philo->data_p.n_eat)
-			pthread_exit(NULL);
-		pick_fork(philo);
-		philo_eat(philo);
-		philo_sleep(philo);
-		philo_think(philo);
+		if(philo->cnt_eat != philo->data_p->n_eat)
+			philo_eat(philo);
+		if(philo->cnt_eat != philo->data_p->n_eat)
+			philo_sleep(philo);
+		if(philo->cnt_eat != philo->data_p->n_eat)
+			philo_think(philo);
 	}
-		pthread_exit(NULL);
+	return (NULL);
 }
 
 int	main(int argc, char **argv)
@@ -138,7 +149,6 @@ int	main(int argc, char **argv)
 	philos = init_philo(philos, main);
 	while (++cnt < main->n_philo)
 	{
-		philos[cnt].time_start = get_time();
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
 			&philos[cnt]);
 	}
@@ -150,13 +160,14 @@ int	main(int argc, char **argv)
 		{
 			if(philos[cnt].cnt_eat == main->n_eat)
 				return(123);
-			printf("Philo[%i] - %i - %i\n", philos[cnt].position, philos[cnt]
-			.cnt_eat, main->n_eat);
 		}
 	}*/
 	cnt = -1;
 	while (++cnt < main->n_philo)
+		
+		// destruir los mutex.
 		pthread_join(philos[cnt].thread, NULL);
+		// Liberar memoria.
 	return (0);
 }
 
