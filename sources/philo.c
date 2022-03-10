@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/07 13:44:50 by                  ###   ########.fr       */
+/*   Updated: 2022/03/10 13:55:41 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	fn_print(t_philo *philo, char *task)
 
 void	pick_fork(t_philo *philo)
 {
-/*	t_philo			*philo;
-
-	philo = n_philo;*/
-	if(philo->position == philo->data_p->n_philo)
+	if(philo->position == philo->data_p->n_philo && philo->data_p->n_philo != 1)
 	{
 		pthread_mutex_lock(philo->m_f_l);
 		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
@@ -77,14 +74,19 @@ void	pick_fork(t_philo *philo)
 		pthread_mutex_lock(philo->m_f_l);
 		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
 	}
-/*	pthread_mutex_unlock(philo->m_f_l);
-	pthread_mutex_unlock(philo->m_f_r);*/
 }
 
 void	philo_eat(t_philo *philo)
 {
-/*	pthread_mutex_lock(philo->m_f_l);
-	pthread_mutex_lock(philo->m_f_r);*/
+	int			dead;
+
+	dead = get_time() - philo->time_eat;
+	if(dead > philo->data_p->t_die)
+	{
+		philo->data_p->is_alive = 1;
+		printf("Dead: %i -- Time_die: %i\n", dead, philo->data_p->t_die);
+	}
+
 	pick_fork(philo);
 	pthread_mutex_lock(&philo->data_p->lock_gen);
 	fn_print(philo, "\033[31mis eating.\033[0m");
@@ -119,6 +121,14 @@ void	*philo_routine(void *n_philo)
 	t_philo 		*philo;
 
 	philo = (t_philo *)n_philo;
+	if(philo->data_p->n_philo == 1)
+	{
+		printf("0ms Philo[1] [32mhas taken right fork.[0m\n");
+		fn_usleep_1(philo->data_p->t_die);
+		printf("%ims Philo[1] [35mis Dead.[0m\n", philo->data_p->t_die);
+		philo->data_p->is_alive = 1;
+		return (NULL);
+	}
 	if(philo->position % 2 == 0)
 		fn_usleep_1(2);
 	while (philo->data_p->is_alive == 0)
@@ -152,7 +162,7 @@ int	main(int argc, char **argv)
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine,
 			&philos[cnt]);
 	}
-/*	cnt = -1;
+	cnt = -1;
 	while (main->is_alive == 0)
 	{
 		cnt = -1;
@@ -161,7 +171,7 @@ int	main(int argc, char **argv)
 			if(philos[cnt].cnt_eat == main->n_eat)
 				return(123);
 		}
-	}*/
+	}
 	cnt = -1;
 	while (++cnt < main->n_philo)
 		
