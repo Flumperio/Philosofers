@@ -6,7 +6,11 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/03/10 13:55:41 by                  ###   ########.fr       */
+=======
+/*   Updated: 2022/03/07 18:11:07 by juasanto         ###   ########.fr       */
+>>>>>>> 5043259b4989591bb63ff511717a922e09b7df3d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,14 +152,14 @@ int	main(int argc, char **argv)
 	t_main			*main;
 	t_philo			*philos;
 	int				cnt;
-	unsigned long			time;
+	//unsigned long			time;
 
 	cnt = -1;
 	main = NULL;
 	philos = NULL;
 	main = init_main(main, argc, argv);
 	chk_args(main);
-	init_fork(main, philos);
+	init_fork(main);
 	philos = init_philo(philos, main);
 	while (++cnt < main->n_philo)
 	{

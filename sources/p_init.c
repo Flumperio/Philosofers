@@ -54,7 +54,7 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 	return(philos);
 }
 
-void	init_fork(t_main *main, t_philo *philo)
+void	init_fork(t_main *main)
 {
 	int		cnt;
 

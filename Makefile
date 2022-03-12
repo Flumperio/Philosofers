@@ -53,7 +53,7 @@ $(OBJ_DIR)%.o : $(SRCS_DIR)%.c
 		@echo Create: $(NAME) Object directory
 		@mkdir -p $(OBJ_DIR)
 #		$(CC) -c $(CFLAGS) $(DEBUGGING) $(LFLAGS) $< -o $@
-		$(CC) -c $(DEBUGGING) $(LFLAGS) $< -o $@ -pthread
+		$(CC) -c $(CFLAGS) $(DEBUGGING) $(LFLAGS) $< -o $@ -pthread
 
 $(NAME): $(OBJS)
 #		@echo "$(CYAN)=========== Compilando LIBFT.A ==========="
