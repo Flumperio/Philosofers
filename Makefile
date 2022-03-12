@@ -80,7 +80,8 @@ git_push: fclean
 		git add *
 		git commit -m "Push_Swap - $(NOW)"
 		git push 
-		@echo "$(RED)=========== DONE ===========$(RESET)"
+		git status
+@echo "$(RED)=========== DONE ===========$(RESET)"
 bonus: all
 re: fclean all
 norm: all
