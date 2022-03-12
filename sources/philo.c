@@ -6,11 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/03/10 13:55:41 by                  ###   ########.fr       */
-=======
-/*   Updated: 2022/03/07 18:11:07 by juasanto         ###   ########.fr       */
->>>>>>> 5043259b4989591bb63ff511717a922e09b7df3d
+/*   Updated: 2022/03/12 12:38:07 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +51,30 @@ void	fn_usleep_1(size_t time_in_ms)
 void	fn_print(t_philo *philo, char *task)
 {
 	unsigned long		time;
+	int					color;
 
+	color = 30 + philo->position;
 	pthread_mutex_lock(&philo->data_p->lock_print);
 	time = get_time() - philo->data_p->time_start;
-	printf("%lims Philo[%i] %s\n", time, philo->position, task);
+	printf("%lims \033[%imPhilo{%i} %s\n", time, color, philo->position, task);
 	pthread_mutex_unlock(&philo->data_p->lock_print);
 }
 
 void	pick_fork(t_philo *philo)
 {
-	if(philo->position == philo->data_p->n_philo && philo->data_p->n_philo != 1)
+	if (philo->position == philo->data_p->n_philo)
 	{
 		pthread_mutex_lock(philo->m_f_l);
-		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
+		fn_print(philo, "has taken left fork.\033[0m");
 		pthread_mutex_lock(philo->m_f_r);
-		fn_print(philo, "\033[32mhas taken right fork.\033[0m");
+		fn_print(philo, "has taken right fork.\033[0m");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->m_f_r);
-		fn_print(philo, "\033[32mhas taken right fork.\033[0m");
+		fn_print(philo, "has taken right fork.\033[0m");
 		pthread_mutex_lock(philo->m_f_l);
-		fn_print(philo, "\033[32mhas taken left fork.\033[0m");
+		fn_print(philo, "has taken left fork.\033[0m");
 	}
 }
 
@@ -88,18 +86,21 @@ void	philo_eat(t_philo *philo)
 	if(dead > philo->data_p->t_die)
 	{
 		philo->data_p->is_alive = 1;
-		printf("Dead: %i -- Time_die: %i\n", dead, philo->data_p->t_die);
+		printf("Philo {%i} is Dead: %i -- Time_die: %i\n", philo->position,
+		dead, philo->data_p->t_die);
 	}
-
-	pick_fork(philo);
-	pthread_mutex_lock(&philo->data_p->lock_gen);
-	fn_print(philo, "\033[31mis eating.\033[0m");
-	philo->time_eat = get_time();
-	pthread_mutex_unlock(&philo->data_p->lock_gen);
-	fn_usleep_1(philo->data_p->t_eat);
-	philo->cnt_eat++;
-	pthread_mutex_unlock(philo->m_f_l);
-	pthread_mutex_unlock(philo->m_f_r);
+	else
+	{
+		pick_fork(philo);
+		pthread_mutex_lock(&philo->data_p->lock_gen);
+		fn_print(philo, "is eating.\033[0m");
+		philo->time_eat = get_time();
+		pthread_mutex_unlock(&philo->data_p->lock_gen);
+		fn_usleep_1(philo->data_p->t_eat);
+		philo->cnt_eat++;
+		pthread_mutex_unlock(philo->m_f_l);
+		pthread_mutex_unlock(philo->m_f_r);
+	}
 }
 
 void	philo_sleep(t_philo *n_philo)
@@ -107,7 +108,7 @@ void	philo_sleep(t_philo *n_philo)
 	t_philo			*philo;
 
 	philo = n_philo;
-	fn_print(philo, "\033[36mis sleeping.\033[0m");
+	fn_print(philo, "is sleeping.\033[0m");
 	fn_usleep_1(philo->data_p->t_sleep);
 }
 
@@ -116,7 +117,7 @@ void	philo_think(t_philo *n_philo)
 	t_philo			*philo;
 
 	philo = n_philo;
-	fn_print(philo, "\033[33mis thinking.\033[0m");
+	fn_print(philo, "is thinking.\033[0m");
 	fn_usleep_1(philo->data_p->t_sleep);
 }
 
@@ -135,7 +136,18 @@ void	*philo_routine(void *n_philo)
 	}
 	if(philo->position % 2 == 0)
 		fn_usleep_1(2);
-	while (philo->data_p->is_alive == 0)
+
+	while (philo->cnt_eat != philo->data_p->n_eat && philo->data_p->is_alive
+	== 0)
+	{
+		if(philo->data_p->is_alive == 0)
+			philo_eat(philo);
+		if(philo->data_p->is_alive == 0)
+			philo_sleep(philo);
+		if(philo->data_p->is_alive == 0)
+			philo_think(philo);
+	}
+/*	while (philo->data_p->is_alive == 0)
 	{
 		if(philo->cnt_eat != philo->data_p->n_eat)
 			philo_eat(philo);
@@ -143,7 +155,7 @@ void	*philo_routine(void *n_philo)
 			philo_sleep(philo);
 		if(philo->cnt_eat != philo->data_p->n_eat)
 			philo_think(philo);
-	}
+	}*/
 	return (NULL);
 }
 
