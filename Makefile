@@ -5,12 +5,10 @@
 #                                                     +:+ +:+         +:+      #
 #    By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/15 12:02:27 by juasanto          #+#    #+#              #
-#   Updated: 2022/02/21 12:04:47 by                  ###   ########.fr       # #
+#    Created: 2022/03/13 13:19:09 by juasanto          #+#    #+#              #
+#    Updated: 2022/03/13 13:19:40 by juasanto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-.PHONY: all clean re fclean test norm git_push
 
 NAME 		=	philo
 LIBFT 		= 	libft.a
@@ -79,7 +77,7 @@ fclean: clean
 git_push: fclean
 		@echo "$(RED)========== GIT_PUSH =========="
 		git add *
-		git commit -m "Push_Swap - $(NOW)"
+		git commit -m "Philosofers - $(NOW)"
 		git push 
 		git status
 @echo "$(RED)=========== DONE ===========$(RESET)"
