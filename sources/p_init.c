@@ -6,11 +6,31 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:23:05 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/07 11:52:50 by                  ###   ########.fr       */
+/*   Updated: 2022/03/13 12:58:40 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+unsigned long	get_time(void)
+{
+	struct timeval	tp;
+	unsigned long	milliseconds;
+
+	gettimeofday(&tp, NULL);
+	milliseconds = tp.tv_sec * 1000;
+	milliseconds += tp.tv_usec / 1000;
+	return (milliseconds);
+}
+
+void	fn_usleep_1(size_t time_in_ms)
+{
+	unsigned long		start_time;
+
+	start_time = get_time();
+	while (get_time() < (time_in_ms + start_time))
+		usleep(500);
+}
 
 t_main	*init_main(t_main *main, int argc, char **argv)
 {
@@ -36,7 +56,6 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 {
 	int		cnt;
 
-
 	cnt = -1;
 	philos = ft_calloc(sizeof (t_philo), main->n_philo);
 	cnt = -1;
@@ -46,14 +65,14 @@ t_philo	*init_philo(t_philo *philos, t_main *main)
 		philos[cnt].cnt_eat = 0;
 		philos[cnt].data_p = main;
 		philos[cnt].m_f_r = &main->lock_fork[cnt];
-		if(cnt == 0)
+		if (cnt == 0)
 			philos[cnt].m_f_l = &main->lock_fork[main->n_philo - 1];
 		else
 			philos[cnt].m_f_l = &main->lock_fork[cnt - 1];
 		philos[cnt].time_eat = get_time();
 	}
 	main->time_start = get_time();
-	return(philos);
+	return (philos);
 }
 
 void	init_fork(t_main *main)
