@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/14 11:34:00 by                  ###   ########.fr       */
+/*   Updated: 2022/03/15 15:08:43 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ int	main(int argc, char **argv)
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine, \
 			&philos[cnt]);
 	cnt = -1;
+	//bucle para comprobar si están vivos o no.
+
+
 	while (++cnt < main->n_philo)
 		pthread_join(philos[cnt].thread, NULL);
 	fn_clean(main, philos);

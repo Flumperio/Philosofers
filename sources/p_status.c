@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 12:57:08 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/13 12:57:49 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/03/15 15:01:49 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	philo_eat(t_philo *philo)
 void	philo_sleep(t_philo *n_philo)
 {
 	t_philo			*philo;
+
+	//incluir resta del tiempo de dormir - tiempo de comer, si es superior
+	// esperar el tiempo de comer y morir.
 
 	philo = n_philo;
 	fn_print(philo, "is sleeping.\033[0m");
