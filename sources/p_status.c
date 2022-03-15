@@ -42,7 +42,9 @@ void	philo_eat(t_philo *philo)
 	}
 	else
 	{
+		//Poner flag de cogida de tenedor
 		pick_fork(philo);
+		//quitar flag
 		pthread_mutex_lock(&philo->data_p->lock_gen);
 		fn_print(philo, "is eating.\033[0m");
 		philo->time_eat = get_time();
