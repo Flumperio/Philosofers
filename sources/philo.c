@@ -61,10 +61,10 @@ int	main(int argc, char **argv)
 	while (++cnt < main->n_philo)
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine, \
 			&philos[cnt]);
-	cnt = -1;
 	//bucle para comprobar si están vivos o no.
 
 
+	cnt = -1;
 	while (++cnt < main->n_philo)
 		pthread_join(philos[cnt].thread, NULL);
 	fn_clean(main, philos);
