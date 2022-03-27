@@ -89,4 +89,5 @@ void	init_fork(t_main *main)
 	pthread_mutex_init(&main->lock_eat, NULL);
 	pthread_mutex_init(&main->lock_think, NULL);
 	pthread_mutex_init(&main->lock_sleep, NULL);
+	pthread_mutex_init(&main->lock_dead, NULL);
 }

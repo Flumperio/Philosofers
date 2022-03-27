@@ -32,17 +32,17 @@ void	*philo_routine(void *n_philo)
 	}
 	if (philo->position % 2 == 0)
 		fn_usleep_1(2);
-	while (philo->cnt_eat != philo->data_p->n_eat && \
-		philo->data_p->is_alive == 0)
+	chk_dead(philo);
+	while (philo->cnt_eat != philo->data_p->n_eat &&  philo->data_p->is_alive
+	 == 0)
 	{
-		if (chk_dead(n_philo) == 0)
-			pick_fork(philo);
-		if (chk_dead(n_philo) == 0)
+		if (philo->data_p->is_alive == 0)
 			philo_eat(philo);
-		if (chk_dead(n_philo) == 0)
+		if (philo->data_p->is_alive == 0)
 			philo_sleep(philo);
-		if (chk_dead(n_philo) == 0)
+		if (philo->data_p->is_alive == 0)
 			philo_think(philo);
+		chk_dead(philo);
 	}
 	return (NULL);
 }
@@ -52,7 +52,7 @@ int	main(int argc, char **argv)
 	t_main			*main;
 	t_philo			*philos;
 	int				cnt;
-	//int				cnt1;
+	int				cnt1;
 
 	cnt = -1;
 	main = NULL;
@@ -64,29 +64,26 @@ int	main(int argc, char **argv)
 	while (++cnt < main->n_philo)
 		pthread_create(&philos[cnt].thread, NULL, &philo_routine, \
 			&philos[cnt]);
-//	cnt = 0;
-//	while (main->is_alive == 0)
-//	{
-//		cnt1 = 0;
-//		while (cnt1 != main->n_philo)
-//		{
-//			if ((get_time() - philos[cnt1].time_eat) >\
-//			(unsigned long)main->t_die)
-//			{
-//				main->is_alive = 1;
-//				fn_print(&philos[cnt], "is DEAAAAD.\033[0m");
-//				break;
-//			}
-//			if (philos[cnt].cnt_eat == main->n_eat)
-//				main->is_alive = 1;
-//			cnt1++;
-//		}
-//		//printf("Alive = %i\n", main->is_alive);
-//	}
+	while (main->is_alive == 0)
+	{
+		cnt1 = -1;
+		while (++cnt1 < main->n_philo && main->is_alive == 0)
+		{
+			if ((int)(get_time() - philos[cnt1].time_eat) > main->t_die \
+				&& main->is_alive == 0)
+			{
+				main->is_alive = 1;
+				fn_print(&philos[cnt1], "is DEAAAAD.\033[0m");
+				break;
+			}
+		}
+	}
 	cnt = -1;
 	while (++cnt < main->n_philo)
+	{
 		pthread_join(philos[cnt].thread, NULL);
-	fn_clean(main, philos);
+	}
+	//fn_clean(main, philos);
 	//system("leaks philo");
 	return (0);
 }

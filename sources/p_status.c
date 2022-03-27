@@ -12,18 +12,15 @@
 
 #include "../includes/philo.h"
 
-int		chk_dead(t_philo *philo)
+void		chk_dead(t_philo *philo)
 {
 	unsigned long	dead;
 
+	pthread_mutex_lock(&philo->data_p->lock_dead);
 	dead = get_time() - philo->time_eat;
 	if ((int)dead > philo->data_p->t_die)
-	{
 		philo->data_p->is_alive = 1;
-		fn_print(philo, "is DEAAAAD.\033[0m");
-		return (1);
-	}
-	return (0);
+	pthread_mutex_unlock(&philo->data_p->lock_dead);
 }
 
 void	pick_fork(t_philo *philo)
@@ -46,10 +43,9 @@ void	pick_fork(t_philo *philo)
 
 void	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data_p->lock_eat);
+	pick_fork(philo);
 	fn_print(philo, "is eating.\033[0m");
 	philo->time_eat = get_time();
-	pthread_mutex_unlock(&philo->data_p->lock_eat);
 	fn_usleep_1(philo->data_p->t_eat);
 	philo->cnt_eat++;
 	pthread_mutex_unlock(philo->m_f_l);
@@ -66,10 +62,10 @@ void	philo_sleep(t_philo *philo)
 
 void	philo_think(t_philo *philo)
 {
-	int				time_think;
+	//int				time_think;
 
-	time_think = (philo->data_p->t_die - (philo->data_p->t_eat + \
-			philo->data_p->t_sleep));
+//	time_think = (philo->data_p->t_die - (philo->data_p->t_eat + \
+//			philo->data_p->t_sleep));
 	fn_print(philo, "is thinking.\033[0m");
-	fn_usleep_1(time_think);
+	//fn_usleep_1(time_think);
 }
