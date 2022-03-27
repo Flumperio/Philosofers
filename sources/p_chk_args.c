@@ -14,9 +14,6 @@
 
 int	chk_args(t_main *main)
 {
-	int		cnt;
-
-	cnt = 0;
 	if (main->n_philo <= 0 || main->t_die <= 0 || main->t_eat <= 0 \
 		|| main->t_sleep <= 0 || \
 		(main->argc == 6 && main->n_eat <= 0))

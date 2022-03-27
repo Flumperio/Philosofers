@@ -41,6 +41,9 @@ typedef struct s_main
 	pthread_mutex_t		*lock_fork;
 	pthread_mutex_t		lock_print;
 	pthread_mutex_t		lock_gen;
+	pthread_mutex_t		lock_eat;
+	pthread_mutex_t		lock_think;
+	pthread_mutex_t		lock_sleep;
 	unsigned long		time_start;
 	struct s_philo		*philos;
 }						t_main;
@@ -56,6 +59,7 @@ typedef struct s_philo
 	int					position;
 	int					cnt_eat;
 	unsigned long		time_eat;
+	int					pick_fork;
 	t_main				*data_p;
 }						t_philo;
 
@@ -76,6 +80,7 @@ void			pick_fork(t_philo *philo);
 void			philo_eat(t_philo *philo);
 void			philo_sleep(t_philo *n_philo);
 void			philo_think(t_philo *n_philo);
+int				chk_dead(t_philo *philo);
 
 /*
 ** Aux Funtions
