@@ -81,7 +81,7 @@ void			pick_fork(t_philo *philo);
 void			philo_eat(t_philo *philo);
 void			philo_sleep(t_philo *n_philo);
 void			philo_think(t_philo *n_philo);
-void				chk_dead(t_philo *philo);
+int				chk_dead(t_philo *philo);
 
 /*
 ** Aux Funtions

@@ -43,6 +43,7 @@ void	fn_print(t_philo *philo, char *task)
 	color = 30 + philo->position;
 	pthread_mutex_lock(&philo->data_p->lock_print);
 	time = get_time() - philo->data_p->time_start;
-	printf("%lims \033[%imPhilo{%i} %s\n", time, color, philo->position, task);
+	if (philo->data_p->is_alive == 0)
+		printf("%lims \033[%imPhilo{%i} %s\n", time, color, philo->position, task);
 	pthread_mutex_unlock(&philo->data_p->lock_print);
 }
