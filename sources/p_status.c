@@ -21,7 +21,7 @@ int			chk_dead(t_philo *philo)
 	if ((int)dead > philo->data_p->t_die)
 	{
 
-		philo->data_p->is_alive = 1;
+		philo->data_p->is_liv = 1;
 		pthread_mutex_unlock(&philo->data_p->lock_dead);
 		return(1);
 	}
@@ -37,8 +37,6 @@ void	pick_fork(t_philo *philo)
 		pthread_mutex_lock(philo->m_f_r);
 		fn_print(philo, "has taken left fork.\033[0m");
 		fn_print(philo, "has taken right fork.\033[0m");
-//		pthread_mutex_unlock(philo->m_f_l);
-//		pthread_mutex_unlock(philo->m_f_r);
 	}
 	else
 	{
@@ -46,14 +44,11 @@ void	pick_fork(t_philo *philo)
 		pthread_mutex_lock(philo->m_f_l);
 		fn_print(philo, "has taken right fork.\033[0m");
 		fn_print(philo, "has taken left fork.\033[0m");
-//		pthread_mutex_unlock(philo->m_f_l);
-//		pthread_mutex_unlock(philo->m_f_r);
 	}
 }
 
 void	philo_eat(t_philo *philo)
 {
-	//pick_fork(philo);
 	fn_print(philo, "is eating.\033[0m");
 	philo->time_eat = get_time();
 	fn_usleep_1(philo->data_p->t_eat);
