@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-int			chk_dead(t_philo *philo)
+int	chk_dead(t_philo *philo)
 {
 	unsigned long	dead;
 
@@ -20,13 +20,12 @@ int			chk_dead(t_philo *philo)
 	dead = get_time() - philo->time_eat;
 	if ((int)dead > philo->data_p->t_die)
 	{
-
 		philo->data_p->is_liv = 1;
 		pthread_mutex_unlock(&philo->data_p->lock_dead);
-		return(1);
+		return (1);
 	}
 	pthread_mutex_unlock(&philo->data_p->lock_dead);
-	return(0);
+	return (0);
 }
 
 void	pick_fork(t_philo *philo)
@@ -67,10 +66,10 @@ void	philo_sleep(t_philo *philo)
 
 void	philo_think(t_philo *philo)
 {
-	//int				time_think;
+	int				time_think;
 
-//	time_think = (philo->data_p->t_die - (philo->data_p->t_eat + \
-//			philo->data_p->t_sleep));
+	time_think = (philo->data_p->t_die - (philo->data_p->t_eat + \
+			philo->data_p->t_sleep));
 	fn_print(philo, "is thinking.\033[0m");
-	//fn_usleep_1(time_think);
+	fn_usleep_1(time_think / 2);
 }
