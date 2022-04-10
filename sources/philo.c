@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/09 21:32:25 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/10 11:24:14 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,9 @@ int	main(int argc, char **argv)
 				main->is_eat = 1;
 				break ;
 			}
-			else if ((int)(get_time() - philos[cnt1].time_eat) > main->t_die \
-					&& main->is_liv == 0)
+			else if (chk_dead(&philos[cnt1]) == 1)
+//			else if ((int)(get_time() - philos[cnt1].time_eat) > main->t_die \
+//					&& main->is_liv == 0)
 			{
 				fn_print(&philos[cnt1], "is DEAD.\033[0m");
 				pthread_mutex_lock(&philos->data_p->lock_print);
@@ -105,9 +106,11 @@ int	main(int argc, char **argv)
 	}
 	printf("main_Philo: %i\n", main->n_philo);
 	cnt = -1;
+	fn_usleep_1(250);
 	while (++cnt < main->n_philo)
 	{
 		printf("n_philo: %i -- cnt: %i\n", main->n_philo, cnt);
+		fn_usleep_1(250);
 		pthread_join(philos[cnt].thread, NULL);
 	}
 	fn_clean(main, philos);
