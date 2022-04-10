@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 12:57:08 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/10 14:08:56 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/10 16:33:05 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,16 @@ void	philo_eat(t_philo *philo)
 
 void	philo_sleep(t_philo *philo)
 {
-//	pthread_mutex_lock(&philo->data_p->lock_sleep);
 	fn_print(philo, "is sleeping.\033[0m");
 	fn_usleep_1(philo->data_p->t_sleep);
-//	pthread_mutex_unlock(&philo->data_p->lock_sleep);
 }
 
 void	philo_think(t_philo *philo)
 {
 	int				time_think;
 
-//	pthread_mutex_lock(&philo->data_p->lock_think);
 	time_think = (philo->data_p->t_die - (philo->data_p->t_eat + \
 			philo->data_p->t_sleep));
 	fn_print(philo, "is thinking.\033[0m");
 	fn_usleep_1(time_think / 2);
-//	pthread_mutex_unlock(&philo->data_p->lock_think);
 }

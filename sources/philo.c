@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/10 14:10:28 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/10 16:32:36 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	one_philo(t_philo *philo)
 void	*philo_routine(void *n_philo)
 {
 	t_philo			*philo;
-//	int				chk_de;
 
 	philo = (t_philo *)n_philo;
 	if (philo->position % 2 == 0)
@@ -32,19 +31,11 @@ void	*philo_routine(void *n_philo)
 	while (philo->cnt_eat != philo->data_p->n_eat && philo->data_p->is_liv == 0)
 	{
 		pick_fork(philo);
-//		pthread_mutex_lock(&philo->data_p->lock_sleep);
-//		chk_de = chk_dead(philo);
-//		pthread_mutex_unlock(&philo->data_p->lock_sleep);
-//		if (chk_de == 1 || philo->data_p->is_liv == 1)
-//			pthread_join(philo->thread, NULL);
-//		else
-//		{
-			philo_eat(philo);
-			if (philo->data_p->is_liv == 0)
-				philo_sleep(philo);
-			if (philo->data_p->is_liv == 0)
-				philo_think(philo);
-//		}
+		philo_eat(philo);
+		if (philo->data_p->is_liv == 0)
+			philo_sleep(philo);
+		if (philo->data_p->is_liv == 0)
+			philo_think(philo);
 	}
 	return (NULL);
 }
