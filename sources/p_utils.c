@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 14:23:07 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/14 11:34:00 by                  ###   ########.fr       */
+/*   Updated: 2022/04/11 17:11:34 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ long long int	ft_atoi(const char *str)
 
 	result = 0;
 	sign = 0;
+	if (fn_no_chars(str) == -1)
+		return (-100);
 	if (*str == '-')
 		sign = 1;
 	if (*str == '-' || *str == '+')

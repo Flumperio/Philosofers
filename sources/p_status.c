@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 12:57:08 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/10 16:33:05 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 17:19:37 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ void	pick_fork(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->m_f_l);
 		pthread_mutex_lock(philo->m_f_r);
-		fn_print(philo, "has taken left fork.\033[0m");
-		fn_print(philo, "has taken right fork.\033[0m");
+		fn_print(philo, "has taken a fork.\033[0m");
+		fn_print(philo, "has taken a fork.\033[0m");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->m_f_r);
 		pthread_mutex_lock(philo->m_f_l);
-		fn_print(philo, "has taken right fork.\033[0m");
-		fn_print(philo, "has taken left fork.\033[0m");
+		fn_print(philo, "has taken a fork.\033[0m");
+		fn_print(philo, "has taken a fork.\033[0m");
 	}
 }
 

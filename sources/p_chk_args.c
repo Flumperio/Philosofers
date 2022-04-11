@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:17:10 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/10 13:00:37 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 17:10:54 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,15 @@ void	fn_print(t_philo *philo, char *task)
 		printf("%lims \033[%imPhilo{%i} %s\n", time, color, \
 						philo->position, task);
 	pthread_mutex_unlock(&philo->data_p->lock_print);
+}
+
+int	fn_no_chars(const char *str)
+{
+	while (*str)
+	{
+		if (ft_isdigit((int)*str) == 0)
+			return (-1);
+		str++;
+	}
+	return (1);
 }

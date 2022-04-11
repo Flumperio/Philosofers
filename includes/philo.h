@@ -6,7 +6,7 @@
 /*   By: juasanto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:10:11 by juasanto          #+#    #+#             */
-/*   Updated: 2022/03/14 14:04:16 by                  ###   ########.fr       */
+/*   Updated: 2022/04/11 17:10:20 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void			init_fork(t_main *main);
 int				chk_args(t_main *philo);
 unsigned long	get_time(void);
 void			fn_usleep_1(size_t time_in_ms);
+int				fn_no_chars(const char *str);
 
 /*
 ** Philo Status;
@@ -91,4 +92,5 @@ long long int	ft_atoi(const char *str);
 void			ft_msgerror(char *str, int errno);
 void			fn_clean(t_main *main, t_philo *philo);
 void			fn_print(t_philo *philo, char *task);
+int				ft_isdigit(int chr);
 #endif

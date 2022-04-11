@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/10 16:32:36 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 17:17:41 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	one_philo(t_philo *philo)
 {
-	printf("0ms Philo[1] [32mhas taken right fork.[0m\n");
+	printf("0ms Philo[1] [32mhas taken a fork.[0m\n");
 	fn_usleep_1(philo->data_p->t_die);
-	printf("%ims Philo[1] [35mis Dead.[0m\n", philo->data_p->t_die);
+	printf("%ims Philo[1] [35mis died.[0m\n", philo->data_p->t_die);
 	philo->data_p->is_liv = 1;
 	philo->data_p->n_philo = -1;
 }
@@ -42,7 +42,7 @@ void	*philo_routine(void *n_philo)
 
 void	philo_dead(t_main *main, t_philo *philos, int c1)
 {
-	fn_print(&philos[c1], "is DEAD.\033[0m");
+	fn_print(&philos[c1], "is died.\033[0m");
 	pthread_mutex_lock(&philos->data_p->lock_print);
 	main->is_liv = 1;
 	main->is_eat = 1;
