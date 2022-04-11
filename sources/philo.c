@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/11 17:17:41 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:41:42 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@ void	one_philo(t_philo *philo)
 	philo->data_p->n_philo = -1;
 }
 
+int		fn_chk_live(t_philo *philos)
+{
+	int	retval;
+
+	pthread_mutex_lock(&philos->data_p->lock_think);
+	retval = philos->data_p->is_liv;
+	pthread_mutex_unlock(&philos->data_p->lock_think);
+	return retval;
+}
+
+
 void	*philo_routine(void *n_philo)
 {
 	t_philo			*philo;
@@ -28,13 +39,13 @@ void	*philo_routine(void *n_philo)
 	philo = (t_philo *)n_philo;
 	if (philo->position % 2 == 0)
 		fn_usleep_1(2);
-	while (philo->cnt_eat != philo->data_p->n_eat && philo->data_p->is_liv == 0)
+	while (philo->cnt_eat != philo->data_p->n_eat && fn_chk_live(philo) == 0)
 	{
 		pick_fork(philo);
 		philo_eat(philo);
-		if (philo->data_p->is_liv == 0)
+		if (fn_chk_live(philo) == 0)
 			philo_sleep(philo);
-		if (philo->data_p->is_liv == 0)
+		if (fn_chk_live(philo) == 0)
 			philo_think(philo);
 	}
 	return (NULL);
@@ -43,10 +54,10 @@ void	*philo_routine(void *n_philo)
 void	philo_dead(t_main *main, t_philo *philos, int c1)
 {
 	fn_print(&philos[c1], "is died.\033[0m");
-	pthread_mutex_lock(&philos->data_p->lock_print);
+	pthread_mutex_lock(&philos->data_p->lock_think);
 	main->is_liv = 1;
+	pthread_mutex_unlock(&philos->data_p->lock_think);
 	main->is_eat = 1;
-	pthread_mutex_unlock(&philos->data_p->lock_print);
 }
 
 void	chk_is_live(t_main *main, t_philo *philos)
@@ -59,17 +70,24 @@ void	chk_is_live(t_main *main, t_philo *philos)
 		c1 = -1;
 		while (++c1 < main->n_philo && main->is_liv == 0)
 		{
-			c2 = -1;
-			while (++c2 < main->n_philo && philos[c2].cnt_eat == main->n_eat)
+			c2 = 0;
+			pthread_mutex_lock(&main->lock_eat);
+			while (c2 < main->n_philo && philos[c2].cnt_eat == main->n_eat)
+			{
+				c2++;
+			}
 			main->is_eat = (c2 == main->n_philo);
 			if (c2 == main->n_philo)
 			{
+				pthread_mutex_lock(&philos->data_p->lock_think);
 				main->is_liv = 1;
+				pthread_mutex_unlock(&philos->data_p->lock_think);
 				main->is_eat = 1;
 			}
 			else if ((int)(get_time() - philos[c1].time_eat) > main->t_die \
 					&& main->is_liv == 0)
 				philo_dead(main, philos, c1);
+			pthread_mutex_unlock(&main->lock_eat);
 		}
 	}
 }
@@ -96,6 +114,6 @@ int	main(int argc, char **argv)
 	while (++cnt < main->n_philo)
 		pthread_join(philos[cnt].thread, NULL);
 	fn_clean(main, philos);
-	system("leaks philo");
+	system("leaks -q philo");
 	return (0);
 }

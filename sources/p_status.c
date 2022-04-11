@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 12:57:08 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/11 17:19:37 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:40:26 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ void	pick_fork(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	fn_print(philo, "is eating.\033[0m");
+	pthread_mutex_lock(&philo->data_p->lock_eat);
 	philo->time_eat = get_time();
-	fn_usleep_1(philo->data_p->t_eat);
 	philo->cnt_eat++;
+	pthread_mutex_unlock(&philo->data_p->lock_eat);
+	fn_usleep_1(philo->data_p->t_eat);
 	pthread_mutex_unlock(philo->m_f_l);
 	pthread_mutex_unlock(philo->m_f_r);
 }

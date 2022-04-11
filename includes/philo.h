@@ -6,7 +6,7 @@
 /*   By: juasanto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:10:11 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/11 17:10:20 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:20:08 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void			philo_eat(t_philo *philo);
 void			philo_sleep(t_philo *n_philo);
 void			philo_think(t_philo *n_philo);
 int				chk_dead(t_philo *philo);
+int				fn_chk_live(t_philo *philo);
 
 /*
 ** Aux Funtions
