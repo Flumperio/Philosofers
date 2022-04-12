@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:02:09 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/11 20:41:42 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/12 14:19:09 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,6 @@ void	one_philo(t_philo *philo)
 	philo->data_p->is_liv = 1;
 	philo->data_p->n_philo = -1;
 }
-
-int		fn_chk_live(t_philo *philos)
-{
-	int	retval;
-
-	pthread_mutex_lock(&philos->data_p->lock_think);
-	retval = philos->data_p->is_liv;
-	pthread_mutex_unlock(&philos->data_p->lock_think);
-	return retval;
-}
-
 
 void	*philo_routine(void *n_philo)
 {
@@ -62,20 +51,17 @@ void	philo_dead(t_main *main, t_philo *philos, int c1)
 
 void	chk_is_live(t_main *main, t_philo *philos)
 {
-	int				c1;
 	int				c2;
 
 	while (main->is_eat == 0 && main->is_liv == 0)
 	{
-		c1 = -1;
-		while (++c1 < main->n_philo && main->is_liv == 0)
+		main->c1 = -1;
+		while (++main->c1 < main->n_philo && main->is_liv == 0)
 		{
-			c2 = 0;
+			c2 = -1;
 			pthread_mutex_lock(&main->lock_eat);
-			while (c2 < main->n_philo && philos[c2].cnt_eat == main->n_eat)
-			{
-				c2++;
-			}
+			while (++c2 < main->n_philo && \
+							philos[c2].cnt_eat == main->n_eat)
 			main->is_eat = (c2 == main->n_philo);
 			if (c2 == main->n_philo)
 			{
@@ -84,9 +70,9 @@ void	chk_is_live(t_main *main, t_philo *philos)
 				pthread_mutex_unlock(&philos->data_p->lock_think);
 				main->is_eat = 1;
 			}
-			else if ((int)(get_time() - philos[c1].time_eat) > main->t_die \
-					&& main->is_liv == 0)
-				philo_dead(main, philos, c1);
+			else if ((int)(get_time() - philos[main->c1].time_eat) > \
+						main->t_die && main->is_liv == 0)
+				philo_dead(main, philos, main->c1);
 			pthread_mutex_unlock(&main->lock_eat);
 		}
 	}
@@ -114,6 +100,5 @@ int	main(int argc, char **argv)
 	while (++cnt < main->n_philo)
 		pthread_join(philos[cnt].thread, NULL);
 	fn_clean(main, philos);
-	system("leaks -q philo");
 	return (0);
 }

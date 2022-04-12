@@ -6,7 +6,7 @@
 /*   By: juasanto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:10:11 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/11 20:20:08 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/12 14:17:42 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_main
 	int					n_eat;
 	int					is_liv;
 	int					is_eat;
+	int					c1;
 	pthread_mutex_t		*lock_fork;
 	pthread_mutex_t		lock_print;
 	pthread_mutex_t		lock_gen;

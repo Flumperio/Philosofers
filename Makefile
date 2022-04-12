@@ -26,7 +26,7 @@ OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 NOW			=	$(shell date +"%d-%m-%y %H:%M")
 
 LFLAGS = -I includes/
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror 
 DEBUGGING = -ggdb
 OPTIMIZING = -O3
 CC = clang
