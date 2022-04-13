@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:17:10 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/12 14:06:21 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/13 10:39:14 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ void	fn_clean(t_main *main, t_philo *philo)
 	while (++cnt < main->n_philo)
 		pthread_mutex_destroy(&main->lock_fork[cnt]);
 	pthread_mutex_destroy(&main->lock_print);
-	pthread_mutex_destroy(&main->lock_gen);
+	pthread_mutex_destroy(&main->lock_eat);
+	pthread_mutex_destroy(&main->lock_think);
+	pthread_mutex_destroy(&main->lock_dead);
 	free (main->lock_fork);
 	free (philo);
 	free (main);

@@ -6,7 +6,7 @@
 /*   By: juasanto <juasanto@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/15 13:23:05 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/09 21:27:52 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/13 10:39:29 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ void	init_fork(t_main *main)
 	while (++cnt < main->n_philo)
 		pthread_mutex_init(&main->lock_fork[cnt], NULL);
 	pthread_mutex_init(&main->lock_print, NULL);
-	pthread_mutex_init(&main->lock_gen, NULL);
 	pthread_mutex_init(&main->lock_eat, NULL);
 	pthread_mutex_init(&main->lock_think, NULL);
-	pthread_mutex_init(&main->lock_sleep, NULL);
 	pthread_mutex_init(&main->lock_dead, NULL);
 }

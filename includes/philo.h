@@ -6,7 +6,7 @@
 /*   By: juasanto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 13:10:11 by juasanto          #+#    #+#             */
-/*   Updated: 2022/04/12 14:17:42 by juasanto         ###   ########.fr       */
+/*   Updated: 2022/04/13 10:38:12 by juasanto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ typedef struct s_main
 	int					c1;
 	pthread_mutex_t		*lock_fork;
 	pthread_mutex_t		lock_print;
-	pthread_mutex_t		lock_gen;
 	pthread_mutex_t		lock_eat;
 	pthread_mutex_t		lock_think;
-	pthread_mutex_t		lock_sleep;
 	pthread_mutex_t		lock_dead;
 	unsigned long		time_start;
 	struct s_philo		*philos;
